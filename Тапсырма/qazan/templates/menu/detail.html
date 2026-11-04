@@ -1,0 +1,60 @@
+
+{% extends "base.html" %}
+{% from "partials/macros.html" import dish_art, dish_card %}
+{% block title %}{{ dish.name }}{% endblock %}
+{% block content %}
+<section class="container section">
+  <nav class="breadcrumbs">
+    <a href="{{ url_for('catalog.index') }}">Мәзір</a>
+    <span>/</span>
+    <a href="{{ url_for('catalog.index', category=dish.category_slug) }}">{{ dish.category_name }}</a>
+    <span>/</span>
+    <span>{{ dish.name }}</span>
+  </nav>
+
+  <div class="dish-detail">
+    <div class="dish-detail-media">
+      {{ dish_art(dish.hue, "dish-art dish-art-lg") }}
+    </div>
+    <div class="dish-detail-info">
+      <div class="dish-card-meta">{{ dish.category_name }} · {{ dish.weight }}</div>
+      <h1>{{ dish.name }}</h1>
+      <p class="lead">{{ dish.description }}</p>
+      <div class="price price-lg">{{ dish.price|tenge }}</div>
+
+      {% if dish.is_available %}
+      <form class="add-form" method="post" action="{{ url_for('cart.add') }}">
+        <input type="hidden" name="dish_id" value="{{ dish.id }}">
+        <label class="field-label" for="quantity">Саны</label>
+        <div class="add-row">
+          <div class="stepper" data-stepper>
+            <button type="button" class="stepper-btn" data-step="-1" aria-label="Азайту">−</button>
+            <input id="quantity" name="quantity" type="number" min="1" max="20" value="1" inputmode="numeric">
+            <button type="button" class="stepper-btn" data-step="1" aria-label="Көбейту">+</button>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">Себетке қосу</button>
+        </div>
+      </form>
+      {% else %}
+      <div class="notice">Бұл тағам уақытша қолжетімсіз. Басқа тағамдарды қарап көріңіз.</div>
+      {% endif %}
+
+      <ul class="dish-facts">
+        <li>Тапсырыс бергеннен кейін дайындалады</li>
+        <li>{{ config.FREE_DELIVERY_FROM|tenge }}-ден бастап жеткізу тегін</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% if related %}
+<section class="container section">
+  <div class="section-head"><h2>Осы санаттан</h2></div>
+  <div class="dish-grid dish-grid-3">
+    {% for item in related %}
+      {{ dish_card(item) }}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

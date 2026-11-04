@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import dish_card %}
+{% block title %}{{ current.name if current else "Мәзір" }}{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <h1>{{ current.name if current else "Мәзір" }}</h1>
+    <p>{{ dishes|length }} тағам · бағалар бір порцияға көрсетілген</p>
+  </div>
+</section>
+
+<section class="container section">
+  <nav class="category-tabs" aria-label="Санаттар">
+    <a href="{{ url_for('catalog.index') }}" class="tab {{ 'active' if not current }}">Барлығы</a>
+    {% for category in categories %}
+    <a href="{{ url_for('catalog.index', category=category.slug) }}"
+       class="tab {{ 'active' if current and current.slug == category.slug }}">
+      {{ category.name }} <span class="tab-count">{{ category.dish_count }}</span>
+    </a>
+    {% endfor %}
+  </nav>
+
+  {% if dishes %}
+  <div class="dish-grid">
+    {% for dish in dishes %}
+      {{ dish_card(dish) }}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>Бұл санатта тағам әзірге жоқ</h3>
+    <a class="btn btn-outline" href="{{ url_for('catalog.index') }}">Бүкіл мәзір</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

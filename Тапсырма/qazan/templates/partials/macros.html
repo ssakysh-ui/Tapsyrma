@@ -1,0 +1,33 @@
+{% macro dish_art(hue, class_name="dish-art") -%}
+<svg class="{{ class_name }}" viewBox="0 0 240 170" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="170" fill="hsl({{ hue }}, 45%, 93%)"/>
+  <circle cx="200" cy="24" r="46" fill="hsl({{ hue }}, 50%, 88%)"/>
+  <circle cx="34" cy="150" r="40" fill="hsl({{ hue }}, 50%, 89%)"/>
+  <ellipse cx="120" cy="96" rx="78" ry="56" fill="hsl({{ hue }}, 20%, 80%)" opacity="0.55"/>
+  <ellipse cx="120" cy="90" rx="76" ry="54" fill="#ffffff"/>
+  <ellipse cx="120" cy="90" rx="58" ry="40" fill="#f4f1ec"/>
+  <ellipse cx="120" cy="88" rx="44" ry="29" fill="hsl({{ hue }}, 62%, 52%)"/>
+  <ellipse cx="108" cy="80" rx="18" ry="10" fill="hsl({{ hue }}, 70%, 64%)"/>
+  <circle cx="138" cy="94" r="6" fill="hsl({{ (hue + 90) % 360 }}, 45%, 42%)"/>
+  <circle cx="126" cy="100" r="4" fill="hsl({{ (hue + 90) % 360 }}, 45%, 48%)"/>
+  <circle cx="104" cy="97" r="5" fill="hsl({{ (hue + 90) % 360 }}, 40%, 40%)"/>
+</svg>
+{%- endmacro %}
+
+{% macro dish_card(dish) -%}
+<article class="dish-card">
+  <a class="dish-card-media" href="{{ url_for('catalog.detail', dish_id=dish.id) }}">
+    {{ dish_art(dish.hue) }}
+    {% if dish.is_popular %}<span class="tag tag-accent">Танымал</span>{% endif %}
+  </a>
+  <div class="dish-card-body">
+    <div class="dish-card-meta">{{ dish.category_name }} · {{ dish.weight }}</div>
+    <h3><a href="{{ url_for('catalog.detail', dish_id=dish.id) }}">{{ dish.name }}</a></h3>
+    <p>{{ dish.description }}</p>
+    <div class="dish-card-foot">
+      <span class="price">{{ dish.price|tenge }}</span>
+      <a class="btn btn-outline btn-sm" href="{{ url_for('catalog.detail', dish_id=dish.id) }}">Таңдау</a>
+    </div>
+  </div>
+</article>
+{%- endmacro %}

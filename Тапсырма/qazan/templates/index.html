@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% from "partials/macros.html" import dish_card %}
+{% block title %}Басты бет{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <span class="eyebrow">Алматы бойынша жеткізу</span>
+      <h1>Үйдегідей дәмді ұлттық тағамдар — есігіңізге дейін</h1>
+      <p>Бешбармақ, палау, манты және ыстық бауырсақ. Тапсырыс беріңіз, біз 45 минут ішінде жеткіземіз.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('catalog.index') }}">Мәзірді ашу</a>
+        <a class="btn btn-ghost btn-lg" href="{{ url_for('orders.track') }}">Тапсырыс күйін білу</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="{{ url_for('static', filename='img/hero.svg') }}" alt="" width="460" height="380">
+    </div>
+  </div>
+</section>
+
+<section class="container features">
+  <div class="feature">
+    <div class="feature-icon">45</div>
+    <div>
+      <h3>45 минутта жеткізу</h3>
+      <p>Тапсырыс қабылданған соң тағам бірден дайындалады.</p>
+    </div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">10K</div>
+    <div>
+      <h3>Тегін жеткізу</h3>
+      <p>10 000 ₸-ден асатын тапсырыстарға жеткізу тегін.</p>
+    </div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">22</div>
+    <div>
+      <h3>22 түрлі тағам</h3>
+      <p>Ыстық тағамдар, сорпалар, тоқаш, тәттілер мен сусындар.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head">
+    <h2>Танымал тағамдар</h2>
+    <a href="{{ url_for('catalog.index') }}">Бүкіл мәзір →</a>
+  </div>
+  <div class="dish-grid">
+    {% for dish in popular %}
+      {{ dish_card(dish) }}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section">
+  <div class="section-head"><h2>Санаттар</h2></div>
+  <div class="category-tiles">
+    {% for category in categories %}
+    <a class="category-tile" href="{{ url_for('catalog.index', category=category.slug) }}">
+      <strong>{{ category.name }}</strong>
+      <span>{{ category.dish_count }} тағам</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container section steps">
+  <h2>Тапсырыс қалай беріледі</h2>
+  <ol class="steps-list">
+    <li><strong>Тағам таңдаңыз</strong><span>Мәзірден қалаған тағамды себетке қосыңыз.</span></li>
+    <li><strong>Мекенжайды жазыңыз</strong><span>Атыңызды, телефоныңызды және мекенжайды көрсетіңіз.</span></li>
+    <li><strong>Күтіңіз</strong><span>Тапсырыс нөмірі арқылы оның күйін бақылаңыз.</span></li>
+  </ol>
+</section>
+{% endblock %}

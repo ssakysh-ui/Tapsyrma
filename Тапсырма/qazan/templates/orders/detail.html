@@ -1,0 +1,68 @@
+
+{% extends "base.html" %}
+{% block title %}Тапсырыс {{ order.code }}{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    {% if created %}
+    <span class="eyebrow">Рахмет, {{ order.customer_name }}!</span>
+    <h1>Тапсырыс қабылданды</h1>
+    <p>Тапсырыс нөмірін сақтап қойыңыз. Оның күйін «Тапсырыс күйі» бетінен көре аласыз.</p>
+    {% else %}
+    <h1>Тапсырыс {{ order.code }}</h1>
+    <p>Тапсырыстың ағымдағы күйі мен құрамы.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="container section">
+  <div class="cart-layout">
+    <div class="card">
+      <div class="order-head">
+        <div>
+          <div class="order-code">{{ order.code }}</div>
+          <div class="muted">{{ order.created_at|kk_datetime }}</div>
+        </div>
+        <span class="status status-{{ order.status }}">{{ statuses[step][1] }}</span>
+      </div>
+
+      <ol class="timeline">
+        {% for key, label in statuses %}
+        <li class="{{ 'done' if loop.index0 <= step }}">{{ label }}</li>
+        {% endfor %}
+      </ol>
+
+      <table class="order-table">
+        <thead><tr><th>Тағам</th><th>Бағасы</th><th>Саны</th><th>Сомасы</th></tr></thead>
+        <tbody>
+          {% for line in lines %}
+          <tr>
+            <td>{{ line.dish_name }}</td>
+            <td>{{ line.price|tenge }}</td>
+            <td>{{ line.quantity }}</td>
+            <td>{{ line.line_total|tenge }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <aside class="summary">
+      <h2>Жеткізу</h2>
+      <dl>
+        <div><dt>Алушы</dt><dd>{{ order.customer_name }}</dd></div>
+        <div><dt>Телефон</dt><dd>{{ order.phone|pretty_phone }}</dd></div>
+        <div><dt>Мекенжай</dt><dd>{{ order.address }}</dd></div>
+        <div><dt>Төлем</dt><dd>{{ payments[order.payment] }}</dd></div>
+        {% if order.comment %}<div><dt>Түсініктеме</dt><dd>{{ order.comment }}</dd></div>{% endif %}
+      </dl>
+      <dl>
+        <div><dt>Тағамдар</dt><dd>{{ order.subtotal|tenge }}</dd></div>
+        <div><dt>Жеткізу</dt><dd>{% if order.delivery_fee %}{{ order.delivery_fee|tenge }}{% else %}тегін{% endif %}</dd></div>
+        <div class="summary-total"><dt>Барлығы</dt><dd>{{ order.total|tenge }}</dd></div>
+      </dl>
+      <a class="btn btn-outline btn-block" href="{{ url_for('catalog.index') }}">Тағы тапсырыс беру</a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

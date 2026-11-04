@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Тапсырысты рәсімдеу{% endblock %}
+{% macro field_error(name) -%}
+  {% if errors.get(name) %}<div class="field-error">{{ errors[name] }}</div>{% endif %}
+{%- endmacro %}
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <h1>Тапсырысты рәсімдеу</h1>
+    <p>Деректеріңізді жазыңыз. Курьер жолға шыққанда сізге қоңырау шалады.</p>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="cart-layout">
+    <form class="card form" method="post" action="{{ url_for('orders.checkout') }}" novalidate>
+      <div class="field {{ 'has-error' if errors.customer_name }}">
+        <label class="field-label" for="customer_name">Атыңыз</label>
+        <input id="customer_name" name="customer_name" type="text" value="{{ data.customer_name or '' }}" autocomplete="name" placeholder="Мысалы: Айгерім">
+        {{ field_error("customer_name") }}
+      </div>
+      <div class="field {{ 'has-error' if errors.phone }}">
+        <label class="field-label" for="phone">Телефон</label>
+        <input id="phone" name="phone" type="tel" value="{{ data.phone or '' }}" autocomplete="tel" placeholder="+7 701 000 00 00">
+        {{ field_error("phone") }}
+      </div>
+      <div class="field {{ 'has-error' if errors.address }}">
+        <label class="field-label" for="address">Жеткізу мекенжайы</label>
+        <input id="address" name="address" type="text" value="{{ data.address or '' }}" autocomplete="street-address" placeholder="Көше, үй, пәтер">
+        {{ field_error("address") }}
+      </div>
+      <div class="field {{ 'has-error' if errors.comment }}">
+        <label class="field-label" for="comment">Курьерге түсініктеме <span class="optional">міндетті емес</span></label>
+        <textarea id="comment" name="comment" rows="3" maxlength="300" placeholder="Подъезд, қабат, домофон коды">{{ data.comment or '' }}</textarea>
+        {{ field_error("comment") }}
+      </div>
+      <fieldset class="field {{ 'has-error' if errors.payment }}">
+        <legend class="field-label">Төлем тәсілі</legend>
+        {% for key, label in payments.items() %}
+        <label class="radio">
+          <input type="radio" name="payment" value="{{ key }}" {{ 'checked' if (data.payment or 'card') == key }}>
+          <span>{{ label }}</span>
+        </label>
+        {% endfor %}
+        {{ field_error("payment") }}
+      </fieldset>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Тапсырысты растау · {{ totals.total|tenge }}</button>
+    </form>
+
+    <aside class="summary">
+      <h2>Сіздің тапсырысыңыз</h2>
+      <ul class="summary-items">
+        {% for item in items %}
+        <li><span>{{ item.name }} × {{ item.quantity }}</span><span>{{ item.line_total|tenge }}</span></li>
+        {% endfor %}
+      </ul>
+      <dl>
+        <div><dt>Тағамдар</dt><dd>{{ totals.subtotal|tenge }}</dd></div>
+        <div><dt>Жеткізу</dt><dd>{% if totals.delivery_fee %}{{ totals.delivery_fee|tenge }}{% else %}тегін{% endif %}</dd></div>
+        <div class="summary-total"><dt>Барлығы</dt><dd>{{ totals.total|tenge }}</dd></div>
+      </dl>
+      <a class="summary-link" href="{{ url_for('cart.view') }}">Себетті өзгерту</a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

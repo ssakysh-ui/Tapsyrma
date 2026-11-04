@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Жеткізу шарттары{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <h1>Жеткізу шарттары</h1>
+    <p>Алматы қаласының барлық аудандарына жеткіземіз.</p>
+  </div>
+</section>
+<section class="container section prose">
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-value">{{ fee|tenge }}</div>
+      <div class="info-label">тапсырыс сомасы {{ free_from|tenge }}-ден аз болса</div>
+    </div>
+    <div class="info-card info-card-accent">
+      <div class="info-value">Тегін</div>
+      <div class="info-label">тапсырыс сомасы {{ free_from|tenge }} және одан көп болса</div>
+    </div>
+    <div class="info-card">
+      <div class="info-value">45 мин</div>
+      <div class="info-label">орташа жеткізу уақыты</div>
+    </div>
+  </div>
+
+  <h2>Төлем</h2>
+  <p>Тапсырысты курьерге қолма-қол ақшамен немесе картамен төлейсіз. Курьерде POS-терминал бар.</p>
+
+  <h2>Бір тапсырыстағы шектеу</h2>
+  <p>Бір тағамнан ең көбі 20 дана тапсырыс беруге болады. Үлкен іс-шараларға арналған тапсырыс үшін +7 727 300 41 41 нөміріне хабарласыңыз.</p>
+
+  <h2>Тапсырыс күйі</h2>
+  <p>Тапсырыс бергеннен кейін сізге QZ-XXXXX түріндегі нөмір беріледі. «Тапсырыс күйі» бетінде телефон нөміріңізді жазып, барлық тапсырыстарыңызды көре аласыз.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Тапсырыс күйі{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <h1>Тапсырыс күйі</h1>
+    <p>Тапсырыс берген кездегі телефон нөміріңізді жазыңыз.</p>
+  </div>
+</section>
+
+<section class="container section narrow">
+  <form class="card track-form" method="get" action="{{ url_for('orders.track') }}">
+    <label class="field-label" for="phone">Телефон нөмірі</label>
+    <div class="add-row">
+      <input id="phone" name="phone" type="tel" value="{{ query }}" placeholder="+7 701 000 00 00">
+      <button type="submit" class="btn btn-primary">Іздеу</button>
+    </div>
+  </form>
+
+  {% if searched %}
+    {% if not phone %}
+    <div class="notice">Телефон нөмірі дұрыс емес. Мысалы: +7 701 555 00 00</div>
+    {% elif orders %}
+    <div class="track-list">
+      {% for order in orders %}
+      <a class="track-item" href="{{ url_for('orders.detail', code=order.code) }}">
+        <div>
+          <strong>{{ order.code }}</strong>
+          <span class="muted">{{ order.created_at|kk_datetime }}</span>
+        </div>
+        <span class="status status-{{ order.status }}">{{ status_names[order.status] }}</span>
+        <span class="price">{{ order.total|tenge }}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="notice">{{ phone|pretty_phone }} нөмірімен тапсырыс табылмады.</div>
+    {% endif %}
+  {% endif %}
+</section>
+{% endblock %}
